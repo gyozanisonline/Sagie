@@ -9,7 +9,7 @@ async function getFeaturedProjects() {
     try {
         const { data } = await Storyblok.get('cdn/stories', {
             starts_with: 'work/',
-            filter_query: { featured: { is: true } },
+            filter_query: { Featured: { is: true } },
             version,
             per_page: 20,
         });

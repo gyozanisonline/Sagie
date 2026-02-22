@@ -1,5 +1,6 @@
-import Storyblok from '@/lib/storyblok';
+import Storyblok, { version } from '@/lib/storyblok';
 import ProjectCarousel from '@/app/components/ProjectCarousel';
+import StoryblokBridgeComp from '@/app/components/StoryblokBridge';
 import Link from 'next/link';
 import styles from './page.module.css';
 
@@ -9,7 +10,7 @@ export async function generateStaticParams() {
     try {
         const { data } = await Storyblok.get('cdn/stories', {
             starts_with: 'work/',
-            version: 'published',
+            version,
             per_page: 100,
         });
         return (data.stories || []).map((s) => ({ slug: s.slug }));
@@ -21,7 +22,7 @@ export async function generateStaticParams() {
 async function getProject(slug) {
     try {
         const { data } = await Storyblok.get(`cdn/stories/work/${slug}`, {
-            version: 'published',
+            version,
         });
         return data.story;
     } catch {
@@ -30,7 +31,8 @@ async function getProject(slug) {
 }
 
 export default async function ProjectPage({ params }) {
-    const project = await getProject(params.slug);
+    const { slug } = await params;
+    const project = await getProject(slug);
 
     if (!project) {
         return (
@@ -41,15 +43,20 @@ export default async function ProjectPage({ params }) {
         );
     }
 
-    const images = project.content.images || [];
-    if (project.content.cover_image?.filename) {
-        images.unshift(project.content.cover_image);
+    // Build images array — CoverImage first, then the rest of Images
+    const images = [];
+    if (project.content.CoverImage?.filename) {
+        images.push(project.content.CoverImage);
+    }
+    if (Array.isArray(project.content.Images)) {
+        images.push(...project.content.Images);
     }
 
     return (
         <div className={styles.page}>
+            <StoryblokBridgeComp />
             <Link href="/work" className={styles.back}>← Work</Link>
-            <ProjectCarousel images={images} title={project.content.title} />
+            <ProjectCarousel images={images} title={project.content.Title} />
         </div>
     );
 }

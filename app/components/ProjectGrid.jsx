@@ -11,7 +11,7 @@ export default function ProjectGrid({ projects = [] }) {
 
     const filtered = active === 'All'
         ? projects
-        : projects.filter((p) => p.content.category === active);
+        : projects.filter((p) => p.content.Category === active);
 
     return (
         <div className={styles.wrapper}>
@@ -36,12 +36,12 @@ export default function ProjectGrid({ projects = [] }) {
                         href={`/work/${project.slug}`}
                         className={styles.item}
                     >
-                        <span className={styles.itemTitle}>{project.content.title}</span>
+                        <span className={styles.itemTitle}>{project.content.Title}</span>
                         <div className={styles.itemImage}>
-                            {project.content.cover_image?.filename && (
+                            {project.content.CoverImage?.filename && (
                                 <Image
-                                    src={project.content.cover_image.filename}
-                                    alt={project.content.title}
+                                    src={project.content.CoverImage.filename}
+                                    alt={project.content.Title || 'Project'}
                                     fill
                                     sizes="(max-width: 768px) 100vw, 33vw"
                                     style={{ objectFit: 'cover' }}

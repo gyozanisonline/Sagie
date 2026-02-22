@@ -51,12 +51,12 @@ export default function HomeCarousel({ projects = [] }) {
                     href={`/work/${project.slug}`}
                     className={styles.card}
                 >
-                    <span className={styles.cardTitle}>{project.content.title}</span>
+                    <span className={styles.cardTitle}>{project.content.Title}</span>
                     <div className={styles.cardImage}>
-                        {project.content.cover_image?.filename && (
+                        {project.content.CoverImage?.filename && (
                             <Image
-                                src={project.content.cover_image.filename}
-                                alt={project.content.title}
+                                src={project.content.CoverImage.filename}
+                                alt={project.content.Title || 'Project'}
                                 fill
                                 sizes="(max-width: 768px) 80vw, 400px"
                                 style={{ objectFit: 'cover' }}
