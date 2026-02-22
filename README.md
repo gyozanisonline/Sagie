@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sagie Maya — Portfolio
 
-## Getting Started
+Portfolio website for graphic designer **Sagie Maya**, built with [Next.js](https://nextjs.org/) and [Storyblok](https://www.storyblok.com/) as the headless CMS.
 
-First, run the development server:
+## Stack
+- **Framework**: Next.js 16 (App Router)
+- **CMS**: Storyblok — Sagie can add/edit/remove projects with no code required
+- **Scroll**: Lenis smooth scrolling
+- **Hosting**: Vercel (recommended)
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file in the root:
 
-## Learn More
+```
+NEXT_PUBLIC_STORYBLOK_TOKEN=your_storyblok_token
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Adding Projects (for Sagie)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Log in to [Storyblok](https://app.storyblok.com)
+2. Go to **Content → Work**
+3. Click **+ Create new** → choose `project` content type
+4. Fill in: title, category, cover image, gallery images, tick **featured** for homepage
+5. Click **Publish** — the site updates automatically
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Content Types
 
-## Deploy on Vercel
+### `project`
+| Field | Type | Purpose |
+|---|---|---|
+| `title` | Text | Project name |
+| `category` | Single option | Photo / Video / Creative Direction / Special Projects |
+| `cover_image` | Asset | Grid thumbnail |
+| `images` | Multi-asset | Project gallery |
+| `featured` | Boolean | Show on homepage carousel |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `info`
+| Field | Type | Purpose |
+|---|---|---|
+| `bio` | Text | About text |
+| `portrait` | Asset | Portrait photo |
+| `email` | Text | Contact email |
+| `instagram_url` | Text | Instagram link |
+| `tagline` | Text | Bottom tagline |

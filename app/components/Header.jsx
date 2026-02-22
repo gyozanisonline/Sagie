@@ -14,8 +14,8 @@ export default function Header() {
             </Link>
 
             <Link href="/" className={`${styles.logo} ${isHome ? styles.logoHero : styles.logoSmall}`}>
-                <span className={styles.logoText}>CAM HICKS</span>
-                <span className={styles.tagline}>Virginia bred. Storyteller. EST 1992</span>
+                <span className={styles.logoText}>SAGIE MAYA</span>
+                <span className={styles.tagline}>Graphic Designer</span>
             </Link>
 
             <Link href="/info" className={styles.navLink}>
