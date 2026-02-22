@@ -5,12 +5,14 @@ import styles from './Header.module.css';
 
 export default function Header() {
     const pathname = usePathname();
-    const isHome = pathname === '/';
+    const isHome    = pathname === '/';
+    const isInfo    = pathname === '/info';
+    const isProject = pathname.startsWith('/work/') && pathname !== '/work';
 
     return (
-        <header className={`${styles.header} ${isHome ? styles.home : styles.sub}`}>
+        <header className={`${styles.header} ${isHome ? styles.home : styles.sub} ${isInfo ? styles.headerInfo : ''}`}>
             <Link href="/work" className={styles.navLink}>
-                WORK
+                {isProject ? '← Work' : 'WORK'}
             </Link>
 
             <Link href="/" className={`${styles.logo} ${isHome ? styles.logoHero : styles.logoSmall}`}>

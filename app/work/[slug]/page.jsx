@@ -55,7 +55,6 @@ export default async function ProjectPage({ params }) {
     return (
         <div className={styles.page}>
             <StoryblokBridgeComp />
-            <Link href="/work" className={styles.back}>← Work</Link>
             <ProjectCarousel images={images} title={project.content.Title} />
         </div>
     );

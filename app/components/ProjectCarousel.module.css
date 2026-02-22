@@ -15,8 +15,8 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 20px;
-    align-self: flex-start;
-    padding-left: 4px;
+    width: 100%;
+    max-width: 900px;
 }
 
 .imageWrap {
