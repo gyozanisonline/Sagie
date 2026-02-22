@@ -1,0 +1,94 @@
+/* ─── Header wrapper ─── */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px 14px 0;
+    mix-blend-mode: normal;
+}
+
+/* ─── Nav links ─── */
+.navLink {
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    line-height: var(--header-height);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.navLink::before {
+    content: '●';
+    font-size: 9px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.navLink:hover::before {
+    opacity: 1;
+}
+
+/* ─── Logo — hero mode (homepage) ─── */
+.logo {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1),
+        font-size 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.logoText {
+    display: block;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    text-transform: uppercase;
+}
+
+.tagline {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-top: 4px;
+}
+
+/* Hero state — giant logo */
+.logoHero .logoText {
+    font-size: clamp(48px, 10vw, 120px);
+}
+
+.logoHero .tagline {
+    opacity: 1;
+}
+
+/* Sub-page state — compact logo in nav */
+.logoSmall .logoText {
+    font-size: 13px;
+    letter-spacing: 0.01em;
+}
+
+.logoSmall .tagline {
+    display: none;
+}
+
+/* ─── Info page — inverted colours ─── */
+.headerInfo {
+    color: var(--blue);
+}
+
+@media (max-width: 768px) {
+    .logoHero .logoText {
+        font-size: clamp(36px, 12vw, 80px);
+    }
+}

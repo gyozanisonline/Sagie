@@ -1,0 +1,96 @@
+.page {
+    min-height: 100vh;
+    background-color: var(--brown);
+    color: var(--blue);
+    padding-top: 60px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 60px);
+}
+
+/* ─── Left: portrait ─── */
+.imageCol {
+    position: relative;
+}
+
+.portrait {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 60vh;
+}
+
+/* ─── Right: text ─── */
+.textCol {
+    padding: 40px 32px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.bio {
+    font-size: clamp(15px, 1.6vw, 20px);
+    font-weight: 900;
+    line-height: 1.3;
+    max-width: 480px;
+}
+
+.press {
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.3;
+}
+
+.press a {
+    text-decoration: underline;
+    color: var(--blue);
+}
+
+/* ─── Footer: contact ─── */
+.footer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 40px;
+}
+
+.contact {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--blue);
+    transition: opacity 0.15s;
+}
+
+.contact:hover {
+    opacity: 0.7;
+}
+
+.tagline {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 8px;
+    opacity: 0.8;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .textCol {
+        padding: 24px 16px 40px;
+    }
+
+    .portrait {
+        height: 60vw;
+        min-height: 260px;
+    }
+}
