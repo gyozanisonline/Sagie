@@ -6,6 +6,7 @@ import { thumb } from '../../lib/thumbs.js';
 import styles from './ProjectSphere.module.css';
 
 const HINT_STORAGE_KEY = 'sagie.sphereHintDismissed';
+const DEFAULT_TILE_COUNT = 47;
 
 const AUTO_ROTATE_SPEED = 0.0018;
 const DRAG_SENSITIVITY = 0.006;
@@ -49,19 +50,39 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
     const rafRef = useRef(null);
     const [hintVisible, setHintVisible] = useState(false);
 
-    const covers = useMemo(() => {
-        const items = [];
+    const allCovers = useMemo(() => {
+        const buckets = [];
+        let maxLen = 0;
         for (const p of projects) {
             const meta = { slug: p.slug, title: p.content.Title, category: p.content.Category };
-            if (p.content.CoverImage?.filename) {
-                items.push({ ...meta, src: p.content.CoverImage.filename });
+            const bag = [];
+            if (p.content.CoverImage?.filename) bag.push(p.content.CoverImage.filename);
+            for (const img of p.content.Images || []) {
+                if (img?.filename) bag.push(img.filename);
             }
-            const extras = (p.content.Images || []).filter((i) => i?.filename);
-            for (const img of extras) items.push({ ...meta, src: img.filename });
+            buckets.push({ meta, bag });
+            if (bag.length > maxLen) maxLen = bag.length;
         }
-        return items;
+        const interleaved = [];
+        for (let i = 0; i < maxLen; i++) {
+            for (const { meta, bag } of buckets) {
+                if (bag[i]) interleaved.push({ ...meta, src: bag[i] });
+            }
+        }
+        return interleaved;
     }, [projects]);
 
+    const [tileCount, setTileCount] = useState(() => Math.min(DEFAULT_TILE_COUNT, allCovers.length || DEFAULT_TILE_COUNT));
+
+    useEffect(() => {
+        setTileCount((c) => {
+            const max = allCovers.length;
+            if (max === 0) return 0;
+            return Math.min(Math.max(1, c), max);
+        });
+    }, [allCovers.length]);
+
+    const covers = useMemo(() => allCovers.slice(0, tileCount), [allCovers, tileCount]);
     const points = useMemo(() => fibonacciSphere(covers.length, radius), [covers.length, radius]);
 
     useEffect(() => {
@@ -103,6 +124,7 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
                 const scale = 0.55 + normalizedDepth * 0.55;
                 const brightness = 25 + normalizedDepth * 75;
                 const zIndex = Math.floor(z2 + radius);
+
                 item.el.style.transform = `translate3d(${x2}px, ${y1}px, 0) scale(${scale})`;
                 item.el.style.zIndex = String(zIndex);
                 item.el.style.filter = `brightness(${brightness}%)`;
@@ -163,7 +185,7 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
             const dy = e.clientY - d.lastY;
             d.lastX = e.clientX;
             d.lastY = e.clientY;
-            if (Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) > 6) d.moved = true;
+            if (Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) > 12) d.moved = true;
             velRef.current.y = dx * DRAG_SENSITIVITY;
             velRef.current.x = -dy * DRAG_SENSITIVITY;
             rotRef.current.y += velRef.current.y;
@@ -246,6 +268,30 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
             <div className={`${styles.hint} ${hintVisible ? styles.hintShow : ''}`} aria-hidden>
                 <span className={styles.hintInner}>Drag to explore · Tap to open</span>
             </div>
+            {allCovers.length > 1 && (
+                <div
+                    className={styles.density}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onPointerMove={(e) => e.stopPropagation()}
+                    onPointerUp={(e) => e.stopPropagation()}
+                >
+                    <label className={styles.densityLabel} htmlFor="sphere-density">
+                        Density
+                    </label>
+                    <input
+                        id="sphere-density"
+                        className={styles.densityInput}
+                        type="range"
+                        min={1}
+                        max={allCovers.length}
+                        step={1}
+                        value={tileCount}
+                        onChange={(e) => setTileCount(Number(e.target.value))}
+                        aria-valuetext={`${tileCount} of ${allCovers.length} tiles`}
+                    />
+                    <span className={styles.densityValue}>{tileCount}</span>
+                </div>
+            )}
         </div>
     );
 }

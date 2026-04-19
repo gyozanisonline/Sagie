@@ -33,7 +33,7 @@
     border-radius: 4px;
     text-decoration: none;
     color: inherit;
-    will-change: transform, opacity, filter;
+    will-change: transform, filter;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     -webkit-tap-highlight-color: transparent;
     pointer-events: auto;
@@ -115,5 +115,120 @@
     .hint {
         transition: opacity 100ms linear;
         transform: translate(-50%, 0);
+    }
+}
+
+/* ─── Density slider ─── */
+.density {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--header-height, 34px) + 12px);
+    transform: translateX(-50%);
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1.5px solid #000;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.densityLabel {
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.densityValue {
+    min-width: 2ch;
+    text-align: center;
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: #ff2a2a;
+    -webkit-text-stroke: 0.5px #000;
+}
+
+.densityInput {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 160px;
+    height: 18px;
+    background: transparent;
+    margin: 0;
+    cursor: pointer;
+}
+
+.densityInput::-webkit-slider-runnable-track {
+    height: 2px;
+    background: #000;
+    border-radius: 2px;
+}
+.densityInput::-moz-range-track {
+    height: 2px;
+    background: #000;
+    border-radius: 2px;
+}
+
+.densityInput::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: #ff2a2a;
+    border: 1.5px solid #000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    cursor: grab;
+}
+.densityInput::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ff2a2a;
+    border: 1.5px solid #000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    cursor: grab;
+}
+
+.densityInput:active::-webkit-slider-thumb {
+    cursor: grabbing;
+}
+.densityInput:active::-moz-range-thumb {
+    cursor: grabbing;
+}
+
+.densityInput:focus-visible {
+    outline: none;
+}
+.densityInput:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(255, 42, 42, 0.45);
+}
+.densityInput:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 3px rgba(255, 42, 42, 0.45);
+}
+
+@media (max-width: 640px) {
+    .density {
+        gap: 8px;
+        padding: 5px 12px;
+    }
+    .densityInput {
+        width: 120px;
+    }
+    .densityLabel {
+        font-size: 9px;
     }
 }

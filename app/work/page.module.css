@@ -48,6 +48,50 @@
     border-color: var(--off-black, #1a1a1a);
 }
 
+.subFilters {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px var(--gutter, 8px) 10px;
+    background: rgba(250, 250, 250, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.subFilter {
+    appearance: none;
+    border: 1px dashed rgba(0, 0, 0, 0.25);
+    background: transparent;
+    color: rgba(0, 0, 0, 0.7);
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.subFilter:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+    color: var(--off-black, #1a1a1a);
+}
+.subFilter:focus-visible {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 2px;
+}
+.subFilterActive {
+    background: var(--off-black, #1a1a1a);
+    color: #fff;
+    border-style: solid;
+    border-color: var(--off-black, #1a1a1a);
+}
+
 .stage {
     position: relative;
     flex: 1;
