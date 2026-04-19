@@ -28,8 +28,8 @@ export default function Header() {
                     {isProject ? '← Work' : 'Work'}
                 </Link>
                 {isProject && projectTitle && (
-                    <span className={styles.crumb} aria-hidden="true">
-                        <span className={styles.crumbSep}>/</span>
+                    <span className={styles.crumb}>
+                        <span className={styles.crumbSep} aria-hidden="true">/</span>
                         <span className={styles.crumbTitle}>{projectTitle}</span>
                     </span>
                 )}
