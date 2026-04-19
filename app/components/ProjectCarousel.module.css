@@ -25,6 +25,12 @@
     max-width: 900px;
     flex: 1;
     overflow: hidden;
+    animation: fadeIn 0.25s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(1.01); }
+    to   { opacity: 1; transform: scale(1); }
 }
 
 .controls {
@@ -50,23 +56,11 @@
     opacity: 0.5;
 }
 
-.dots {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #ccc;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: background 0.2s ease;
-}
-
-.dotActive {
-    background: var(--black);
+.count {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    min-width: 48px;
+    text-align: center;
+    opacity: 0.5;
 }

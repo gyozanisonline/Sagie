@@ -1,31 +1,8 @@
-import Storyblok, { version } from '@/lib/storyblok';
-import HomeCarousel from './components/HomeCarousel';
-import StoryblokBridgeComp from './components/StoryblokBridge';
-import styles from './page.module.css';
+import HomeStrip from './components/HomeStrip';
+import { PROJECTS } from '@/lib/projects';
 
-export const revalidate = 60;
+const HERO_PROJECT_COUNT = 8;
 
-async function getFeaturedProjects() {
-    try {
-        const { data } = await Storyblok.get('cdn/stories', {
-            starts_with: 'work/',
-            filter_query: { Featured: { is: true } },
-            version,
-            per_page: 20,
-        });
-        return data.stories || [];
-    } catch {
-        return [];
-    }
-}
-
-export default async function HomePage() {
-    const featured = await getFeaturedProjects();
-
-    return (
-        <div className={styles.page}>
-            <StoryblokBridgeComp />
-            <HomeCarousel projects={featured} />
-        </div>
-    );
+export default function HomePage() {
+    return <HomeStrip projects={PROJECTS.slice(0, HERO_PROJECT_COUNT)} />;
 }
