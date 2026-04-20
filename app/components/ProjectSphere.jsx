@@ -175,7 +175,6 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
                 pointerId: e.pointerId,
             };
             velRef.current = { x: 0, y: 0 };
-            el.setPointerCapture?.(e.pointerId);
             dismissHint();
         };
         const onMove = (e) => {
@@ -185,7 +184,11 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
             const dy = e.clientY - d.lastY;
             d.lastX = e.clientX;
             d.lastY = e.clientY;
-            if (Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) > 12) d.moved = true;
+            if (!d.moved && Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) > 12) {
+                d.moved = true;
+                el.setPointerCapture?.(e.pointerId);
+            }
+            if (!d.moved) return;
             velRef.current.y = dx * DRAG_SENSITIVITY;
             velRef.current.x = -dy * DRAG_SENSITIVITY;
             rotRef.current.y += velRef.current.y;

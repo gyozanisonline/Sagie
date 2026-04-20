@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { thumb } from '../../lib/thumbs.js';
 import styles from './InfiniteGrid.module.css';
 
-const TILE_W = 320;
-const TILE_H = 220;
+const TILE_W = 240;
+const TILE_H = 340;
 const GAP = 16;
 const CELL_W = TILE_W + GAP;
 const CELL_H = TILE_H + GAP;
@@ -156,7 +156,6 @@ export default function InfiniteGrid({ projects = [], filter = 'All', active = t
             pointerId: e.pointerId,
         };
         velRef.current = { x: 0, y: 0 };
-        viewportRef.current?.setPointerCapture?.(e.pointerId);
         setHintVisible(false);
     };
     const onPointerMove = (e) => {
@@ -166,7 +165,11 @@ export default function InfiniteGrid({ projects = [], filter = 'All', active = t
         const dy = e.clientY - d.lastY;
         d.lastX = e.clientX;
         d.lastY = e.clientY;
-        if (Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) > 6) d.moved = true;
+        if (!d.moved && Math.abs(e.clientX - d.startX) + Math.abs(e.clientY - d.startY) > 6) {
+            d.moved = true;
+            viewportRef.current?.setPointerCapture?.(e.pointerId);
+        }
+        if (!d.moved) return;
         panRef.current.x += dx;
         panRef.current.y += dy;
         velRef.current = { x: dx, y: dy };
@@ -253,7 +256,7 @@ export default function InfiniteGrid({ projects = [], filter = 'All', active = t
                             src={thumb(cell.src)}
                             alt={cell.title || ''}
                             fill
-                            sizes="320px"
+                            sizes="240px"
                             quality={70}
                             unoptimized
                             style={{ objectFit: 'cover' }}
