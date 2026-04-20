@@ -44,6 +44,7 @@ export default function ScatterTable({ projects }) {
     const reduceMotion = useReducedMotion();
     const [mounted, setMounted] = useState(false);
     const [mobile, setMobile] = useState(false);
+    const [showHint, setShowHint] = useState(true);
 
     useEffect(() => {
         const mq = window.matchMedia('(max-width: 640px)');
@@ -53,6 +54,20 @@ export default function ScatterTable({ projects }) {
         mq.addEventListener('change', update);
         return () => mq.removeEventListener('change', update);
     }, []);
+
+    useEffect(() => {
+        if (!mobile) return;
+        const onScroll = () => {
+            if (window.scrollY > 80) setShowHint(false);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [mobile]);
+
+    const canvasHeight = useMemo(() => {
+        if (!mounted) return 0;
+        return mobile ? window.innerHeight * 2 : window.innerHeight;
+    }, [mounted, mobile]);
 
     const layout = useMemo(
         () => (mounted ? buildLayout(projects, mobile) : []),
@@ -71,6 +86,7 @@ export default function ScatterTable({ projects }) {
                         onBringToFront={() => setTopZ((z) => z + 1)}
                         topZ={topZ}
                         index={idx}
+                        canvasHeight={canvasHeight}
                     />
                 ) : (
                     <ScatterCard
@@ -80,25 +96,41 @@ export default function ScatterTable({ projects }) {
                         onBringToFront={() => setTopZ((z) => z + 1)}
                         topZ={topZ}
                         index={idx}
+                        canvasHeight={canvasHeight}
                     />
                 )
+            )}
+            {mounted && mobile && (
+                <div className={styles.footer}>
+                    <Link href="/work" className={styles.footerLink}>
+                        See all work →
+                    </Link>
+                </div>
+            )}
+            {mounted && mobile && showHint && (
+                <div className={styles.scrollHint} aria-hidden="true">
+                    Scroll ↓
+                </div>
             )}
         </div>
     );
 }
 
-function useThrowAnimation({ reduceMotion, x, y, rotate, tiltOffset, delay }) {
+function useThrowAnimation({ reduceMotion, x, y, rotate, tiltOffset, delay, canvasHeight }) {
     const targetX = (x / 100) * window.innerWidth;
-    const targetY = (y / 100) * window.innerHeight;
-    const offscreenY = window.innerHeight * 1.1;
+    const targetY = (y / 100) * canvasHeight;
+    const viewportH = window.innerHeight;
+    const inInitialViewport = targetY < viewportH;
+    const shouldThrow = !reduceMotion && inInitialViewport;
+    const offscreenY = viewportH * 1.1;
 
     const mvX = useMotionValue(targetX);
-    const mvY = useMotionValue(reduceMotion ? targetY : offscreenY);
-    const mvRotate = useMotionValue(reduceMotion ? rotate : rotate - tiltOffset);
-    const mvScale = useMotionValue(reduceMotion ? 1 : 1.15);
+    const mvY = useMotionValue(shouldThrow ? offscreenY : targetY);
+    const mvRotate = useMotionValue(shouldThrow ? rotate - tiltOffset : rotate);
+    const mvScale = useMotionValue(shouldThrow ? 1.15 : 1);
 
     useEffect(() => {
-        if (reduceMotion) return;
+        if (!shouldThrow) return;
         const opts = { duration: THROW_DURATION, delay, ease: THROW_EASE };
         const ctrls = [
             animate(mvY, targetY, opts),
@@ -112,7 +144,7 @@ function useThrowAnimation({ reduceMotion, x, y, rotate, tiltOffset, delay }) {
     return { mvX, mvY, mvRotate, mvScale };
 }
 
-function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
+function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index, canvasHeight }) {
     const { project, x, y, rotate, width, aspect, delay } = card;
     const [z, setZ] = useState(10 + index);
     const downPos = useRef({ x: 0, y: 0, moved: false });
@@ -124,6 +156,7 @@ function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
         rotate,
         tiltOffset: 6,
         delay,
+        canvasHeight,
     });
 
     return (
@@ -173,7 +206,7 @@ function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
     );
 }
 
-function ScatterProp({ item, reduceMotion, onBringToFront, topZ, index }) {
+function ScatterProp({ item, reduceMotion, onBringToFront, topZ, index, canvasHeight }) {
     const { src, w, h, x, y, rotate, width, delay } = item;
     const [z, setZ] = useState(10 + index);
     const downPos = useRef({ x: 0, y: 0, moved: false });
@@ -186,6 +219,7 @@ function ScatterProp({ item, reduceMotion, onBringToFront, topZ, index }) {
         rotate,
         tiltOffset: 10,
         delay,
+        canvasHeight,
     });
 
     return (
@@ -272,8 +306,8 @@ function buildLayout(projects, mobile) {
 
     const xSpread = mobile ? 70 : 78;
     const xCenter = 50 - xSpread / 2;
-    const yBase = mobile ? 55 : 35;
-    const yRange = mobile ? 40 : 55;
+    const yBase = mobile ? 5 : 35;
+    const yRange = mobile ? 88 : 55;
 
     const cards = projects.map((project) => {
         const src = project.content.CoverImage?.filename;

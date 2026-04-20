@@ -86,8 +86,9 @@
 
 @media (max-width: 640px) {
     .hero {
-        gap: 24px;
-        padding: 80px 16px 40px;
+        min-height: auto;
+        gap: 20px;
+        padding: 64px 16px 32px;
     }
     .pill {
         padding: 8px 14px;
