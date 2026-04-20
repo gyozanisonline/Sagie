@@ -2,43 +2,114 @@
 import { useMemo, useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion, useMotionValue, animate } from 'motion/react';
 import { thumb, thumbDims } from '../../lib/thumbs.js';
 import styles from './ScatterTable.module.css';
 
 const TAP_THRESHOLD_PX = 6;
 const MAX_CARD_W = 300;
 const MIN_CARD_W = 120;
+const THROW_DELAY = 0.5;
+const THROW_DURATION = 0.6;
+const THROW_EASE = [0.16, 1, 0.3, 1];
+
+const EXTRAS = [
+    {
+        id: 'eyeglasses',
+        src: '/extras/glasses.png',
+        w: 434,
+        h: 412,
+        minW: 180,
+        maxW: 260,
+    },
+    {
+        id: 'sd-card',
+        src: '/extras/extreme-pro-sd-uhs-ii-v60-64gb-front.png',
+        w: 1680,
+        h: 1680,
+        minW: 110,
+        maxW: 160,
+    },
+    {
+        id: 'pencil',
+        src: '/extras/pencil.png',
+        w: 1493,
+        h: 2131,
+        minW: 160,
+        maxW: 240,
+    },
+];
 
 export default function ScatterTable({ projects }) {
     const reduceMotion = useReducedMotion();
+    const [mounted, setMounted] = useState(false);
     const [mobile, setMobile] = useState(false);
 
     useEffect(() => {
         const mq = window.matchMedia('(max-width: 640px)');
         const update = () => setMobile(mq.matches);
         update();
+        setMounted(true);
         mq.addEventListener('change', update);
         return () => mq.removeEventListener('change', update);
     }, []);
 
-    const layout = useMemo(() => buildLayout(projects, mobile), [projects, mobile]);
-    const [topZ, setTopZ] = useState(layout.length + 10);
+    const layout = useMemo(
+        () => (mounted ? buildLayout(projects, mobile) : []),
+        [projects, mobile, mounted]
+    );
+    const [topZ, setTopZ] = useState(10);
 
     return (
         <div className={styles.table} aria-label="Featured projects">
-            {layout.map((card, idx) => (
-                <ScatterCard
-                    key={card.project.slug}
-                    card={card}
-                    reduceMotion={reduceMotion}
-                    onBringToFront={() => setTopZ((z) => z + 1)}
-                    topZ={topZ}
-                    index={idx}
-                />
-            ))}
+            {layout.map((item, idx) =>
+                item.kind === 'prop' ? (
+                    <ScatterProp
+                        key={item.id}
+                        item={item}
+                        reduceMotion={reduceMotion}
+                        onBringToFront={() => setTopZ((z) => z + 1)}
+                        topZ={topZ}
+                        index={idx}
+                    />
+                ) : (
+                    <ScatterCard
+                        key={item.project.slug}
+                        card={item}
+                        reduceMotion={reduceMotion}
+                        onBringToFront={() => setTopZ((z) => z + 1)}
+                        topZ={topZ}
+                        index={idx}
+                    />
+                )
+            )}
         </div>
     );
+}
+
+function useThrowAnimation({ reduceMotion, x, y, rotate, tiltOffset, delay }) {
+    const targetX = (x / 100) * window.innerWidth;
+    const targetY = (y / 100) * window.innerHeight;
+    const offscreenY = window.innerHeight * 1.1;
+
+    const mvX = useMotionValue(targetX);
+    const mvY = useMotionValue(reduceMotion ? targetY : offscreenY);
+    const mvRotate = useMotionValue(reduceMotion ? rotate : rotate - tiltOffset);
+    const mvScale = useMotionValue(reduceMotion ? 1 : 1.15);
+
+    useEffect(() => {
+        if (reduceMotion) return;
+        const opts = { duration: THROW_DURATION, delay, ease: THROW_EASE };
+        const ctrls = [
+            animate(mvY, targetY, opts),
+            animate(mvRotate, rotate, opts),
+            animate(mvScale, 1, opts),
+        ];
+        return () => ctrls.forEach((c) => c.stop());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return { mvX, mvY, mvRotate, mvScale };
 }
 
 function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
@@ -46,15 +117,14 @@ function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
     const [z, setZ] = useState(10 + index);
     const downPos = useRef({ x: 0, y: 0, moved: false });
 
-    const initial = reduceMotion
-        ? { opacity: 0, x: `${x}vw`, y: `${y}vh`, rotate, scale: 1 }
-        : { opacity: 0, x: `${x}vw`, y: '110vh', rotate: rotate - 6, scale: 1.15 };
-
-    const animate = { opacity: 1, x: `${x}vw`, y: `${y}vh`, rotate, scale: 1 };
-
-    const transition = reduceMotion
-        ? { duration: 0.4, delay: index * 0.02 }
-        : { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay };
+    const { mvX, mvY, mvRotate, mvScale } = useThrowAnimation({
+        reduceMotion,
+        x,
+        y,
+        rotate,
+        tiltOffset: 6,
+        delay,
+    });
 
     return (
         <motion.div
@@ -64,13 +134,13 @@ function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
                 aspectRatio: aspect,
                 zIndex: z,
                 touchAction: 'none',
+                x: mvX,
+                y: mvY,
+                rotate: mvRotate,
+                scale: mvScale,
             }}
-            initial={initial}
-            animate={animate}
-            transition={transition}
             drag
             dragMomentum={false}
-            dragElastic={0.6}
             whileDrag={{ scale: 1.04 }}
             onPointerDown={(e) => {
                 downPos.current = { x: e.clientX, y: e.clientY, moved: false };
@@ -103,6 +173,78 @@ function ScatterCard({ card, reduceMotion, onBringToFront, topZ, index }) {
     );
 }
 
+function ScatterProp({ item, reduceMotion, onBringToFront, topZ, index }) {
+    const { src, w, h, x, y, rotate, width, delay } = item;
+    const [z, setZ] = useState(10 + index);
+    const downPos = useRef({ x: 0, y: 0, moved: false });
+    const aspect = w / h;
+
+    const { mvX, mvY, mvRotate, mvScale } = useThrowAnimation({
+        reduceMotion,
+        x,
+        y,
+        rotate,
+        tiltOffset: 10,
+        delay,
+    });
+
+    return (
+        <motion.div
+            className={`${styles.card} ${styles.prop}`}
+            style={{
+                width,
+                aspectRatio: aspect,
+                zIndex: z,
+                touchAction: 'none',
+                x: mvX,
+                y: mvY,
+                rotate: mvRotate,
+                scale: mvScale,
+            }}
+            drag
+            dragMomentum={false}
+            whileDrag={{ scale: 1.04 }}
+            onPointerDown={(e) => {
+                downPos.current = { x: e.clientX, y: e.clientY, moved: false };
+                const next = topZ + 1;
+                setZ(next);
+                onBringToFront();
+            }}
+            onPointerMove={(e) => {
+                const dx = e.clientX - downPos.current.x;
+                const dy = e.clientY - downPos.current.y;
+                if (Math.hypot(dx, dy) > TAP_THRESHOLD_PX) {
+                    downPos.current.moved = true;
+                }
+            }}
+        >
+            <Link
+                href="/info"
+                className={styles.cardLink}
+                draggable={false}
+                aria-label="About"
+                onClick={(e) => {
+                    if (downPos.current.moved) {
+                        e.preventDefault();
+                    }
+                }}
+            >
+                <Image
+                    src={src}
+                    alt=""
+                    width={w}
+                    height={h}
+                    unoptimized
+                    priority
+                    draggable={false}
+                    className={styles.propImage}
+                    sizes="320px"
+                />
+            </Link>
+        </motion.div>
+    );
+}
+
 function CardImage({ project }) {
     const src = project.content.CoverImage?.filename;
     if (!src) return null;
@@ -128,26 +270,64 @@ function buildLayout(projects, mobile) {
     const seed = pickSeed();
     const rand = mulberry32(seed);
 
-    return projects.map((project, i) => {
+    const xSpread = mobile ? 70 : 78;
+    const xCenter = 50 - xSpread / 2;
+    const yBase = mobile ? 55 : 35;
+    const yRange = mobile ? 40 : 55;
+
+    const cards = projects.map((project) => {
         const src = project.content.CoverImage?.filename;
         const dims = (src && thumbDims(src)) || { w: 1024, h: 1024 };
         const aspect = dims.w / dims.h;
 
         const width = MIN_CARD_W + rand() * (MAX_CARD_W - MIN_CARD_W);
         const rotate = (rand() - 0.5) * 16;
-
-        const xSpread = mobile ? 70 : 78;
-        const xCenter = 50 - xSpread / 2;
         const x = xCenter + rand() * xSpread;
-
-        const yBase = mobile ? 55 : 35;
-        const yRange = mobile ? 40 : 55;
         const y = yBase + rand() * yRange;
 
-        const delay = 0.5 + i * 0.07;
-
-        return { project, x, y, rotate, width, aspect, delay };
+        return {
+            kind: 'card',
+            project,
+            x,
+            y,
+            rotate,
+            width,
+            aspect,
+            delay: THROW_DELAY,
+        };
     });
+
+    const propScale = mobile ? 0.75 : 1;
+    const props = EXTRAS.map((extra) => {
+        const width = (extra.minW + rand() * (extra.maxW - extra.minW)) * propScale;
+        const rotate = (rand() - 0.5) * 40;
+        const x = xCenter + rand() * xSpread;
+        const y = yBase + rand() * yRange;
+
+        return {
+            kind: 'prop',
+            id: extra.id,
+            src: extra.src,
+            w: extra.w,
+            h: extra.h,
+            x,
+            y,
+            rotate,
+            width,
+            delay: THROW_DELAY,
+        };
+    });
+
+    return shuffle([...cards, ...props], rand);
+}
+
+function shuffle(arr, rand) {
+    const out = arr.slice();
+    for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
 }
 
 function pickSeed() {

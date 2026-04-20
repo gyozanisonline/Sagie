@@ -38,6 +38,18 @@
     display: block;
 }
 
+.prop {
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
+}
+
+.propImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
 .cardTitle {
     position: absolute;
     left: 0;
