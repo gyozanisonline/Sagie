@@ -84,6 +84,13 @@
     transform: scale(2);
 }
 
+/* Keyboard focus ring on items — inherits hover siblings shift */
+.item:focus-visible {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
 /* Transitions — only after first interaction to avoid animating on page load */
 .strip[data-ready=true] .item {
     transition: transform 0.3s cubic-bezier(0.26, 1, 0.48, 1);
@@ -91,6 +98,22 @@
 
 .strip[data-ready=true] .image {
     transition: transform 0.3s cubic-bezier(0.26, 1, 0.48, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .strip[data-ready=true] .item,
+    .strip[data-ready=true] .image {
+        transition: none;
+    }
+    .item[data-active=true] .image {
+        transform: scale(1.15);
+    }
+    .item[data-active=false][data-before-active=true],
+    .item[data-active=false][data-after-active=true],
+    .item[data-active=false][data-before-active=true][data-hovered-last=true],
+    .item[data-active=false][data-after-active=true][data-hovered-first=true] {
+        transform: none;
+    }
 }
 
 @media (max-width: 768px) {

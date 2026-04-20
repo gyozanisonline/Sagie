@@ -10,7 +10,8 @@ export function generateStaticParams() {
 
 export default async function ProjectPage({ params }) {
     const { slug } = await params;
-    const project = PROJECTS.find((p) => p.slug === slug);
+    const projectIndex = PROJECTS.findIndex((p) => p.slug === slug);
+    const project = projectIndex >= 0 ? PROJECTS[projectIndex] : null;
 
     if (!project) {
         return (
@@ -29,17 +30,31 @@ export default async function ProjectPage({ params }) {
         images.push(...project.content.Images);
     }
 
+    const nextProject = PROJECTS[(projectIndex + 1) % PROJECTS.length];
+
     if (project.layout === 'cover-stack') {
         return (
             <div className={styles.pageStack}>
-                <CoverStack images={images} title={project.content.Title} />
+                <CoverStack
+                    images={images}
+                    title={project.content.Title}
+                    category={project.content.Category}
+                    nextSlug={nextProject?.slug}
+                    nextTitle={nextProject?.content?.Title}
+                />
             </div>
         );
     }
 
     return (
         <div className={styles.page}>
-            <ProjectCarousel images={images} title={project.content.Title} />
+            <ProjectCarousel
+                images={images}
+                title={project.content.Title}
+                category={project.content.Category}
+                nextSlug={nextProject?.slug}
+                nextTitle={nextProject?.content?.Title}
+            />
         </div>
     );
 }

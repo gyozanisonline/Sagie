@@ -1,5 +1,6 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import InfiniteGrid from '../components/InfiniteGrid';
 import ProjectSphere from '../components/ProjectSphere';
 import CoverStack from '../components/CoverStack';
@@ -9,6 +10,12 @@ import styles from './page.module.css';
 export default function WorkPage() {
     const [filter, setFilter] = useState('All');
     const [subFilter, setSubFilter] = useState(null);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const cat = params.get('category');
+        if (cat && CATEGORIES.includes(cat)) setFilter(cat);
+    }, []);
 
     const isAll = filter === 'All';
     const subs = SUBCATEGORIES?.[filter] ?? null;
@@ -32,13 +39,13 @@ export default function WorkPage() {
     }, [filter, subFilter, isAll]);
 
     const coverArtImages = useMemo(() => {
-        if (filter !== 'Graphic Design' || subFilter !== 'Cover Art') return [];
+        if (filter !== 'Graphic' || subFilter !== 'Cover Art') return [];
         return filteredProjects
             .map((p) => p.content.CoverImage)
             .filter((c) => c?.filename);
     }, [filter, subFilter, filteredProjects]);
 
-    const showCoverStack = filter === 'Graphic Design' && subFilter === 'Cover Art' && coverArtImages.length > 0;
+    const showCoverStack = filter === 'Graphic' && subFilter === 'Cover Art' && coverArtImages.length > 0;
 
     const label = isAll
         ? 'All Projects'
@@ -53,6 +60,7 @@ export default function WorkPage() {
 
     return (
         <div className={styles.page}>
+            <h1 className={styles.srOnly}>Work</h1>
             <nav className={styles.filters} aria-label="Filter projects by category">
                 {CATEGORIES.map((cat) => (
                     <button
@@ -65,6 +73,8 @@ export default function WorkPage() {
                         {cat}
                     </button>
                 ))}
+                <span className={styles.sep} aria-hidden="true" />
+                <Link href="/info" className={styles.filter}>Info</Link>
             </nav>
 
             {availableSubs && availableSubs.length > 0 && (

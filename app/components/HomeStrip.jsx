@@ -30,6 +30,8 @@ export default function HomeStrip({ projects = [] }) {
                     data-hovered-last={String(activeIndex === last)}
                     onMouseEnter={() => { setActiveIndex(i); setReady(true); }}
                     onMouseLeave={() => setActiveIndex(null)}
+                    onFocus={() => { setActiveIndex(i); setReady(true); }}
+                    onBlur={() => setActiveIndex(null)}
                 >
                     <span className={styles.title}>{p.content.Title}</span>
                     <div className={styles.image}>

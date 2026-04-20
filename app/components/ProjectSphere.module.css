@@ -156,8 +156,7 @@
     font-weight: 900;
     font-size: 11px;
     letter-spacing: 0.02em;
-    color: #ff2a2a;
-    -webkit-text-stroke: 0.5px #000;
+    color: var(--off-black, #1a1a1a);
 }
 
 .densityInput {
@@ -188,7 +187,7 @@
     height: 14px;
     margin-top: -6px;
     border-radius: 50%;
-    background: #ff2a2a;
+    background: var(--off-black, #1a1a1a);
     border: 1.5px solid #000;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     cursor: grab;
@@ -197,7 +196,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #ff2a2a;
+    background: var(--off-black, #1a1a1a);
     border: 1.5px solid #000;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     cursor: grab;

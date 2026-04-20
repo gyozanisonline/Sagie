@@ -218,10 +218,8 @@ export default function ProjectSphere({ projects = [], active = true, radius = 4
     }, []);
 
     const onTileClick = (slug) => (e) => {
-        if (dragRef.current.moved) {
-            e.preventDefault();
-            return;
-        }
+        e.preventDefault();
+        if (dragRef.current.moved) return;
         router.push(`/work/${slug}`);
     };
 

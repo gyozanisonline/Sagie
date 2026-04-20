@@ -1,12 +1,13 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './CoverStack.module.css';
 
 const WHEEL_THRESHOLD = 60;
 const WHEEL_COOLDOWN_MS = 140;
 
-export default function CoverStack({ images = [], title = '' }) {
+export default function CoverStack({ images = [], title = '', category = '', nextSlug = null, nextTitle = '' }) {
     const [current, setCurrent] = useState(0);
     const [expanded, setExpanded] = useState(null);
     const stackRef = useRef(null);
@@ -104,7 +105,10 @@ export default function CoverStack({ images = [], title = '' }) {
         <>
             <div className={styles.wrap}>
                 <header className={styles.heading}>
-                    <h1 className={styles.title}>{title}</h1>
+                    <div className={styles.headingRow}>
+                        <h1 className={styles.title}>{title}</h1>
+                        {category && <p className={styles.category}>{category}</p>}
+                    </div>
                     <p className={styles.hint}>
                         <span aria-hidden>↓</span> Scroll / arrows · Click to open
                     </p>
@@ -167,6 +171,14 @@ export default function CoverStack({ images = [], title = '' }) {
                         {current + 1} / {n}
                     </div>
                 </div>
+
+                {nextSlug && (
+                    <Link href={`/work/${nextSlug}`} className={styles.nextLink} aria-label={`Next project: ${nextTitle}`}>
+                        <span className={styles.nextLabel}>Next</span>
+                        <span className={styles.nextTitle}>{nextTitle}</span>
+                        <span aria-hidden="true">→</span>
+                    </Link>
+                )}
             </div>
 
             {expanded !== null && (

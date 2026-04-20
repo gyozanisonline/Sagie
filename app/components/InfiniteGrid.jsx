@@ -184,10 +184,8 @@ export default function InfiniteGrid({ projects = [], filter = 'All', active = t
     };
 
     const onTileClick = (slug) => (e) => {
-        if (dragRef.current.moved) {
-            e.preventDefault();
-            return;
-        }
+        e.preventDefault();
+        if (dragRef.current.moved) return;
         router.push(`/work/${slug}`);
     };
 

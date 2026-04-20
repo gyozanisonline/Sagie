@@ -7,6 +7,8 @@ import styles from './Header.module.css';
 export default function Header() {
     const pathname = usePathname();
     const isHome    = pathname === '/';
+    if (isHome) return null;
+
     const isInfo    = pathname === '/info';
     const isWork    = pathname === '/work';
     const isProject = pathname.startsWith('/work/') && pathname !== '/work';
@@ -16,17 +18,20 @@ export default function Header() {
     const projectTitle = project?.content?.Title ?? null;
 
     const workActive = isWork || isProject;
+    const showSideNav = isProject || isInfo;
 
     return (
         <header className={`${styles.header} ${isHome ? styles.home : styles.sub} ${isInfo ? styles.headerInfo : ''}`}>
             <div className={styles.left}>
-                <Link
-                    href="/work"
-                    className={`${styles.navLink} ${workActive ? styles.navLinkActive : ''}`}
-                    aria-current={workActive ? 'page' : undefined}
-                >
-                    {isProject ? '← Work' : 'Work'}
-                </Link>
+                {showSideNav && (
+                    <Link
+                        href="/work"
+                        className={`${styles.navLink} ${workActive ? styles.navLinkActive : ''}`}
+                        aria-current={workActive ? 'page' : undefined}
+                    >
+                        {isProject ? '← Work' : 'Work'}
+                    </Link>
+                )}
                 {isProject && projectTitle && (
                     <span className={styles.crumb}>
                         <span className={styles.crumbSep} aria-hidden="true">/</span>
@@ -37,17 +42,18 @@ export default function Header() {
 
             <Link href="/" className={`${styles.logo} ${isHome ? styles.logoHero : styles.logoSmall}`}>
                 <span className={styles.logoText}>SAGIE MAYA</span>
-                <span className={styles.tagline}>Graphic Designer</span>
             </Link>
 
             <div className={styles.right}>
-                <Link
-                    href="/info"
-                    className={`${styles.navLink} ${isInfo ? styles.navLinkActive : ''}`}
-                    aria-current={isInfo ? 'page' : undefined}
-                >
-                    Info
-                </Link>
+                {showSideNav && (
+                    <Link
+                        href="/info"
+                        className={`${styles.navLink} ${isInfo ? styles.navLinkActive : ''}`}
+                        aria-current={isInfo ? 'page' : undefined}
+                    >
+                        Info
+                    </Link>
+                )}
             </div>
         </header>
     );
