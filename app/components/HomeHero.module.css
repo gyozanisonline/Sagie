@@ -1,0 +1,106 @@
+.hero {
+    position: relative;
+    min-height: 100dvh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(80px, 10vh, 140px) 24px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.logo {
+    pointer-events: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.logoText {
+    display: block;
+    font-size: clamp(48px, 10vw, 128px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    text-transform: uppercase;
+}
+
+.tagline {
+    display: block;
+    font-size: clamp(12px, 1.1vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.pills {
+    pointer-events: auto;
+    position: relative;
+    z-index: 100;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 10px;
+    max-width: min(960px, 100%);
+}
+
+.pillWrap {
+    display: inline-flex;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border: 1.5px solid rgba(0, 0, 0, 0.85);
+    border-radius: 999px;
+    background: var(--off-white);
+    font-size: clamp(12px, 1vw, 14px);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.pill:hover {
+    background: var(--black);
+    color: var(--off-white);
+    transform: translateY(-1px);
+}
+
+.sep {
+    display: inline-block;
+    width: 1px;
+    height: 18px;
+    background: rgba(0, 0, 0, 0.35);
+    margin: 0 6px;
+}
+
+@media (max-width: 640px) {
+    .hero {
+        min-height: auto;
+        gap: 20px;
+        padding: 64px 16px 32px;
+    }
+    .pill {
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+    .sep {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pill {
+        transition: none;
+    }
+}

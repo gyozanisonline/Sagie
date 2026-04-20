@@ -1,0 +1,153 @@
+/* ─── Bottom image strip — fixed to viewport bottom ─── */
+.strip {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: flex-end;
+    padding: 0 8px 8px;
+    pointer-events: none;
+}
+
+/* Each item container */
+.item {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    pointer-events: all;
+    z-index: 0;
+}
+
+/* Project title above the thumbnail */
+.title {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.125;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Active item sits on top */
+.item[data-active=true] {
+    z-index: 10;
+}
+
+/* Items before the active one (to the left) slide further left */
+.item[data-active=false][data-before-active=true] {
+    transform: translateX(-75%);
+}
+
+/* When hovered item is last, push all others further left */
+.item[data-active=false][data-before-active=true][data-hovered-last=true] {
+    transform: translateX(-150%);
+}
+
+/* Items after the active one (to the right) slide further right */
+.item[data-active=false][data-after-active=true] {
+    transform: translateX(75%);
+}
+
+/* When hovered item is first, push all others further right */
+.item[data-active=false][data-after-active=true][data-hovered-first=true] {
+    transform: translateX(150%);
+}
+
+/* The image wrapper — this is what scales */
+.image {
+    width: 100%;
+    flex-shrink: 0;
+    transform-origin: 50% 100%;
+}
+
+/* First item scales from bottom-left corner */
+.item[data-is-first=true] .image {
+    transform-origin: 0 100%;
+}
+
+/* Last item scales from bottom-right corner */
+.item[data-is-last=true] .image {
+    transform-origin: 100% 100%;
+}
+
+/* Scale up the hovered image */
+.item[data-active=true] .image {
+    transform: scale(2);
+}
+
+/* Keyboard focus ring on items — inherits hover siblings shift */
+.item:focus-visible {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+/* Transitions — only after first interaction to avoid animating on page load */
+.strip[data-ready=true] .item {
+    transition: transform 0.3s cubic-bezier(0.26, 1, 0.48, 1);
+}
+
+.strip[data-ready=true] .image {
+    transition: transform 0.3s cubic-bezier(0.26, 1, 0.48, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .strip[data-ready=true] .item,
+    .strip[data-ready=true] .image {
+        transition: none;
+    }
+    .item[data-active=true] .image {
+        transform: scale(1.15);
+    }
+    .item[data-active=false][data-before-active=true],
+    .item[data-active=false][data-after-active=true],
+    .item[data-active=false][data-before-active=true][data-hovered-last=true],
+    .item[data-active=false][data-after-active=true][data-hovered-first=true] {
+        transform: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .strip {
+        display: none;
+    }
+}
+
+/* ─── Mobile CTA — only visible when strip is hidden ─── */
+.mobileCta {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobileCta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: fixed;
+        left: 50%;
+        bottom: 32px;
+        transform: translateX(-50%);
+        padding: 12px 20px;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 0, 0, 0.9);
+        background: rgba(255, 255, 255, 0.9);
+        color: #000;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 10;
+    }
+}

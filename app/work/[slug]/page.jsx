@@ -1,38 +1,17 @@
-import Storyblok, { version } from '@/lib/storyblok';
 import ProjectCarousel from '@/app/components/ProjectCarousel';
-import StoryblokBridgeComp from '@/app/components/StoryblokBridge';
+import CoverStack from '@/app/components/CoverStack';
 import Link from 'next/link';
 import styles from './page.module.css';
+import { PROJECTS } from '@/lib/projects';
 
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-    try {
-        const { data } = await Storyblok.get('cdn/stories', {
-            starts_with: 'work/',
-            version,
-            per_page: 100,
-        });
-        return (data.stories || []).map((s) => ({ slug: s.slug }));
-    } catch {
-        return [];
-    }
-}
-
-async function getProject(slug) {
-    try {
-        const { data } = await Storyblok.get(`cdn/stories/work/${slug}`, {
-            version,
-        });
-        return data.story;
-    } catch {
-        return null;
-    }
+export function generateStaticParams() {
+    return PROJECTS.map((p) => ({ slug: p.slug }));
 }
 
 export default async function ProjectPage({ params }) {
     const { slug } = await params;
-    const project = await getProject(slug);
+    const projectIndex = PROJECTS.findIndex((p) => p.slug === slug);
+    const project = projectIndex >= 0 ? PROJECTS[projectIndex] : null;
 
     if (!project) {
         return (
@@ -43,7 +22,6 @@ export default async function ProjectPage({ params }) {
         );
     }
 
-    // Build images array — CoverImage first, then the rest of Images
     const images = [];
     if (project.content.CoverImage?.filename) {
         images.push(project.content.CoverImage);
@@ -52,10 +30,31 @@ export default async function ProjectPage({ params }) {
         images.push(...project.content.Images);
     }
 
+    const nextProject = PROJECTS[(projectIndex + 1) % PROJECTS.length];
+
+    if (project.layout === 'cover-stack') {
+        return (
+            <div className={styles.pageStack}>
+                <CoverStack
+                    images={images}
+                    title={project.content.Title}
+                    category={project.content.Category}
+                    nextSlug={nextProject?.slug}
+                    nextTitle={nextProject?.content?.Title}
+                />
+            </div>
+        );
+    }
+
     return (
         <div className={styles.page}>
-            <StoryblokBridgeComp />
-            <ProjectCarousel images={images} title={project.content.Title} />
+            <ProjectCarousel
+                images={images}
+                title={project.content.Title}
+                category={project.content.Category}
+                nextSlug={nextProject?.slug}
+                nextTitle={nextProject?.content?.Title}
+            />
         </div>
     );
 }

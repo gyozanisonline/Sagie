@@ -1,0 +1,185 @@
+/* ─── Wrapper ─── */
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* ─── Fixed right preview panel ─── */
+.preview {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 45vw;
+    height: 100vh;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+/* Gradient fades the image away near the top — keeps header readable */
+.preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 110px;
+    background: linear-gradient(180deg, var(--off-white) 10%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.previewVisible {
+    opacity: 1;
+}
+
+.previewImg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.previewImgActive {
+    opacity: 1;
+}
+
+/* ─── Left content ─── */
+.content {
+    width: 55%;
+    padding: 0 14px 100px;
+}
+
+/* ─── Filter tabs ─── */
+.filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.filter {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    color: #888;
+    padding: 0;
+    transition: color 0.15s ease;
+}
+
+.filter:hover {
+    color: var(--black);
+}
+
+.filterActive {
+    color: var(--black);
+}
+
+.filterActive::after {
+    content: ' ●';
+    font-size: 7px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+/* ─── Grouped layout ─── */
+.group {
+    margin-top: 40px;
+}
+
+.group:first-child {
+    margin-top: 0;
+}
+
+.groupHeading {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    opacity: 0.35;
+    margin: 0 0 4px;
+    padding: 0;
+}
+
+/* ─── Project rows ─── */
+.list {
+    list-style: none;
+}
+
+.row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--black);
+    transition: opacity 0.2s ease;
+}
+
+.rowDimmed {
+    opacity: 0.2;
+}
+
+.num {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    opacity: 0.35;
+    min-width: 22px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.title {
+    font-size: clamp(20px, 2.4vw, 32px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    flex: 1;
+    transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.row:hover .title {
+    transform: translateX(10px);
+}
+
+.cat {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.35;
+    flex-shrink: 0;
+}
+
+/* ─── Mobile: hide preview, full-width list ─── */
+@media (max-width: 768px) {
+    .preview {
+        display: none;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .title {
+        font-size: 17px;
+        letter-spacing: -0.01em;
+    }
+
+    .cat {
+        display: none;
+    }
+
+    .row {
+        padding: 18px 0;
+    }
+}

@@ -1,0 +1,155 @@
+.table {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    will-change: transform;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18));
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.cardLink {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    color: inherit;
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.prop {
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
+}
+
+.propImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
+.cardTitle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+
+.card:hover .cardTitle {
+    opacity: 1;
+}
+
+.footer {
+    display: none;
+}
+
+.scrollHint {
+    display: none;
+}
+
+@keyframes scrollHintBounce {
+    0%, 100% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, 6px);
+    }
+}
+
+@media (max-width: 640px) {
+    .table {
+        position: relative;
+        inset: auto;
+        height: 200vh;
+        overflow: visible;
+    }
+    .cardTitle {
+        opacity: 1;
+    }
+    .footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        padding: 32px 16px 56px;
+        pointer-events: auto;
+        z-index: 5;
+    }
+    .footerLink {
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 13px;
+        color: var(--off-black);
+        text-decoration: none;
+        padding: 14px 24px;
+        border: 2px solid var(--off-black);
+        background: var(--off-white);
+    }
+    .scrollHint {
+        display: block;
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        z-index: 50;
+        pointer-events: none;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(0, 0, 0, 0.6);
+        background: rgba(250, 250, 250, 0.85);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--off-black);
+        animation: scrollHintBounce 1.4s ease-in-out infinite;
+    }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+    .scrollHint {
+        animation: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+}

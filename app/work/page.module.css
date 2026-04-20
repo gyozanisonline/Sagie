@@ -1,0 +1,173 @@
+.page {
+    position: fixed;
+    inset: 52px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--off-white, #fafafa);
+}
+
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.filters {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px var(--gutter, 8px);
+    background: rgba(250, 250, 250, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.filter {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: transparent;
+    color: var(--off-black, #1a1a1a);
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.filter:hover {
+    border-color: rgba(0, 0, 0, 0.45);
+}
+.filter:focus-visible {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 2px;
+}
+.filterActive {
+    background: var(--off-black, #1a1a1a);
+    color: #fff;
+    border-color: var(--off-black, #1a1a1a);
+}
+
+.sep {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    margin: 0 6px;
+    align-self: center;
+}
+
+.subFilters {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px var(--gutter, 8px) 10px;
+    background: rgba(250, 250, 250, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.subFilter {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: transparent;
+    color: rgba(0, 0, 0, 0.7);
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.subFilter:hover {
+    border-color: rgba(0, 0, 0, 0.45);
+    color: var(--off-black, #1a1a1a);
+}
+.subFilter:focus-visible {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 2px;
+}
+.subFilterActive {
+    background: var(--off-black, #1a1a1a);
+    color: #fff;
+    border-color: var(--off-black, #1a1a1a);
+}
+
+.stage {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+}
+
+.status {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: none;
+}
+
+.statusLabel {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--off-black, #1a1a1a);
+}
+
+.statusCount {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(0, 0, 0, 0.55);
+    font-variant-numeric: tabular-nums;
+}
+
+.layer {
+    position: absolute;
+    inset: 0;
+    transition: opacity 420ms ease;
+    will-change: opacity;
+}
+.layerVisible {
+    opacity: 1;
+    pointer-events: auto;
+}
+.layerHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .layer {
+        transition: none;
+    }
+}

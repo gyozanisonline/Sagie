@@ -1,0 +1,120 @@
+.viewport {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    overscroll-behavior: contain;
+}
+.viewport:active {
+    cursor: grabbing;
+}
+.viewport:focus {
+    outline: none;
+}
+.viewport:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--blue, #00f9ff);
+}
+
+.tile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    overflow: hidden;
+    background: #eee;
+    text-decoration: none;
+    color: inherit;
+    will-change: transform;
+    transition: filter 180ms ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.7) 100%);
+    opacity: 0.75;
+    transition: opacity 180ms ease;
+    pointer-events: none;
+}
+.tile:hover::after {
+    opacity: 1;
+}
+.tile:hover {
+    z-index: 2;
+}
+
+.tile img {
+    pointer-events: none;
+}
+
+.label {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px;
+    color: #fff;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.labelTitle {
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.labelCat {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+}
+
+.hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+}
+.hintShow {
+    opacity: 1;
+}
+.hintInner {
+    display: inline-block;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .tile::after {
+        opacity: 0.9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tile,
+    .tile::after {
+        transition: none;
+    }
+}

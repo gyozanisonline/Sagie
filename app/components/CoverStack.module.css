@@ -1,0 +1,374 @@
+.wrap {
+    min-height: 100vh;
+    padding: calc(var(--header-height) + 6vh) var(--gutter) 12vh;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 4vh, 56px);
+}
+
+.heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 clamp(16px, 4vw, 48px);
+}
+
+.headingRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 18px;
+}
+
+.title {
+    font-size: clamp(28px, 5vw, 56px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 0.95;
+}
+
+.category {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 999px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.hint {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin: 0;
+}
+
+/* Crate — scene tilts down, pile recedes up-and-back, current pops forward */
+.stack {
+    --card-w: clamp(260px, 34vw, 440px);
+    --card-h: var(--card-w);
+
+    /* Global scene */
+    --scene-tilt: 32deg;
+
+    /* Future pile — visible staircase receding up-and-back */
+    --future-step-y: -26px;
+    --future-step-z: -64px;
+    --future-fade: 0.06;
+
+    /* Current record — faces viewer, pops forward */
+    --current-y: 20px;
+    --current-z: 140px;
+    --current-lean: 4deg;
+
+    /* Past record — tips backward over the top */
+    --past-y: -260px;
+    --past-z: -40px;
+    --past-rot: -108deg;
+
+    position: relative;
+    height: min(82vh, 860px);
+    perspective: 2400px;
+    perspective-origin: 50% 55%;
+    outline: none;
+    touch-action: none;
+    overscroll-behavior: contain;
+}
+
+.scene {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--scene-tilt));
+    transform-origin: 50% 60%;
+}
+
+.slot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--card-w);
+    height: var(--card-h);
+    margin: calc(var(--card-h) / -2) 0 0 calc(var(--card-w) / -2);
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transform-origin: 50% 50%;
+    transition:
+        transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 420ms ease,
+        filter 320ms ease;
+    z-index: calc(500 - var(--abs));
+    outline: none;
+}
+
+.card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.22),
+        0 4px 12px rgba(0, 0, 0, 0.18);
+    transition:
+        transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.card img {
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Future pile — steps up in Y and back in Z, brightness falls with depth */
+.slot[data-state='future'] {
+    transform: translate3d(
+        0,
+        calc(var(--abs) * var(--future-step-y)),
+        calc(var(--abs) * var(--future-step-z))
+    );
+}
+.slot[data-state='future'] .card {
+    filter: brightness(calc(max(0.5, 1 - var(--abs) * var(--future-fade))));
+}
+
+/* Current — pops forward, counter-rotates out of scene tilt so it faces viewer */
+.slot[data-state='current'] {
+    z-index: 1000;
+    transform: translate3d(0, var(--current-y), var(--current-z))
+        rotateX(calc(var(--scene-tilt) * -1 + var(--current-lean)));
+}
+.slot[data-state='current'] .card {
+    box-shadow:
+        0 80px 120px rgba(0, 0, 0, 0.3),
+        0 24px 48px rgba(0, 0, 0, 0.2);
+}
+
+/* Past — pivots on top edge, tips backward over the pile */
+.slot[data-state='past'] {
+    pointer-events: none;
+    transform-origin: 50% 0%;
+    opacity: calc(max(0, 1 - var(--abs) * 0.22));
+    transform: translate3d(
+            0,
+            calc(var(--past-y) - var(--abs) * 6px),
+            calc(var(--past-z) - var(--abs) * 8px)
+        )
+        rotateX(var(--past-rot));
+}
+.slot[data-state='past'] .card {
+    filter: brightness(0.8);
+}
+
+/* Culling: hide records too deep in the pile to save paint */
+.slot[data-state='future'][style*='--abs: 10'],
+.slot[data-state='future'][style*='--abs: 11'],
+.slot[data-state='future'][style*='--abs: 12'],
+.slot[data-state='future'][style*='--abs: 13'],
+.slot[data-state='future'][style*='--abs: 14'],
+.slot[data-state='future'][style*='--abs: 15'],
+.slot[data-state='future'][style*='--abs: 16'],
+.slot[data-state='future'][style*='--abs: 17'] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.stack:focus-visible .slot[data-state='current'] .card {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 4px;
+}
+
+.counter {
+    position: absolute;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    opacity: 0.55;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.nextLink {
+    align-self: flex-end;
+    margin: 0 clamp(16px, 4vw, 48px);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--off-black, #1a1a1a);
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.nextLink:hover {
+    background: var(--off-black, #1a1a1a);
+    color: #fff;
+    border-color: var(--off-black, #1a1a1a);
+    transform: translateX(2px);
+}
+
+.nextLink:focus-visible {
+    outline: 2px solid var(--blue, #00f9ff);
+    outline-offset: 2px;
+}
+
+.nextLabel {
+    opacity: 0.6;
+}
+
+.nextTitle {
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 40vw;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nextLink {
+        transition: none;
+    }
+}
+
+/* ---- Expanded overlay ---- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.94);
+    z-index: 1100;
+    display: grid;
+    grid-template-columns: 60px 1fr 60px;
+    align-items: center;
+    padding: 6vh 2vw;
+    animation: fadeIn 220ms ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.expanded {
+    position: relative;
+    width: 100%;
+    height: 88vh;
+    grid-column: 2;
+}
+
+.close {
+    position: absolute;
+    top: calc(var(--header-height) + 16px);
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.nav {
+    grid-row: 1;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 28px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 150ms ease;
+}
+.nav:hover {
+    opacity: 1;
+}
+.navPrev {
+    grid-column: 1;
+    justify-self: start;
+}
+.navNext {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.overlay .counter {
+    position: absolute;
+    bottom: 3vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    opacity: 0.7;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 768px) {
+    .stack {
+        --card-w: clamp(220px, 70vw, 340px);
+        --scene-tilt: 24deg;
+        --future-step-y: -18px;
+        --future-step-z: -44px;
+        --current-y: 12px;
+        --current-z: 90px;
+        --current-lean: 3deg;
+        --past-y: -180px;
+        --past-z: -24px;
+        --past-rot: -100deg;
+        height: 70vh;
+    }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+    .stack {
+        --scene-tilt: 0deg;
+        --future-step-y: 0px;
+        --future-step-z: 0px;
+        --current-y: 0px;
+        --current-z: 0px;
+        --current-lean: 0deg;
+        --past-y: 0px;
+        --past-z: 0px;
+        --past-rot: 0deg;
+    }
+    .slot,
+    .card {
+        transition: opacity 200ms ease;
+    }
+    .slot[data-state='past'],
+    .slot[data-state='future'] {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .overlay {
+        animation: none;
+    }
+}
