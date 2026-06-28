@@ -59,7 +59,7 @@
     font-size: 11px;
     font-weight: 900;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--off-white);
     background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
     opacity: 0;
@@ -110,7 +110,7 @@
     }
     .footerLink {
         font-weight: 900;
-        text-transform: uppercase;
+        text-transform: none;
         letter-spacing: 0.06em;
         font-size: 13px;
         color: var(--off-black);
@@ -136,7 +136,7 @@
         font-size: 11px;
         font-weight: 900;
         letter-spacing: 0.06em;
-        text-transform: uppercase;
+        text-transform: none;
         color: var(--off-black);
         animation: scrollHintBounce 1.4s ease-in-out infinite;
     }

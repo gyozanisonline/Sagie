@@ -35,16 +35,23 @@
 
 /* ─── Nav links ─── */
 .navLink {
-    font-size: 13px;
-    font-weight: 900;
+    font-family: var(--font-big-caslon), Georgia, serif;
+    font-size: clamp(16px, 1.3vw, 20px);
+    font-weight: 400;
     letter-spacing: 0.01em;
-    text-transform: uppercase;
+    text-transform: none;
     line-height: var(--header-height);
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     white-space: nowrap;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+}
+.navLink:hover {
+    text-decoration: none;
 }
 
 .navLink::before {
@@ -67,10 +74,11 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-family: var(--font-big-caslon), Georgia, serif;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: 0.01em;
-    text-transform: uppercase;
+    text-transform: none;
     line-height: var(--header-height);
     min-width: 0;
     max-width: 38vw;
@@ -100,10 +108,11 @@
 
 .logoText {
     display: block;
-    font-weight: 900;
+    font-family: var(--font-big-caslon), Georgia, serif;
+    font-weight: 400;
     letter-spacing: -0.02em;
     line-height: 0.9;
-    text-transform: uppercase;
+    text-transform: none;
 }
 
 .tagline {
@@ -116,7 +125,7 @@
 
 /* Hero state — giant logo */
 .logoHero .logoText {
-    font-size: clamp(48px, 10vw, 120px);
+    font-size: clamp(40px, 7vw, 104px);
 }
 
 .logoHero .tagline {
@@ -133,13 +142,82 @@
     display: none;
 }
 
-/* ─── Info page — inverted colours ─── */
+/* ─── Info page — dark styleframe: giant centred logo, cream ink ─── */
 .headerInfo {
-    color: var(--blue);
+    color: var(--cream);
+}
+
+.infoHead {
+    align-items: center;
+    padding: clamp(28px, 5vh, 64px) clamp(24px, 7vw, 96px) 0;
 }
 
 @media (max-width: 768px) {
     .logoHero .logoText {
         font-size: clamp(36px, 12vw, 80px);
     }
+}
+
+/* ─── Work dropdown ─── */
+.left {
+    position: relative;
+}
+
+.workBtn {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+    font-family: var(--font-big-caslon), Georgia, serif;
+    font-size: clamp(16px, 1.3vw, 20px);
+    letter-spacing: 0.01em;
+    line-height: var(--header-height);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+}
+.workBtn:hover {
+    text-decoration: none;
+}
+
+.scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 95;
+    background: transparent;
+    border: 0;
+    cursor: default;
+}
+
+/* plain words dripping down from "Work" — no box, no pills */
+.dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    z-index: 110;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.dropItem {
+    display: block;
+    font-family: var(--font-big-caslon), Georgia, serif;
+    font-size: 14px;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    color: inherit;
+    transition: opacity 0.15s ease;
+}
+.dropItem:hover {
+    opacity: 0.5;
+}
+
+/* ─── Home / hero header (frame 01): centred nav, breathing room on top ─── */
+.header.home {
+    align-items: center;
+    padding: clamp(32px, 7vh, 80px) clamp(48px, 15vw, 240px) 0;
 }

@@ -1,106 +1,97 @@
+/* ─────────────────────────────────────────────
+   Info — dark styleframe (Untitled-1-02).
+   Near-black ground, cream ink. Header carries the
+   giant centred "Sagie Maya" logo + Work/Info, inverted
+   to cream via .infoHead / .headerInfo (Header.module.css).
+───────────────────────────────────────────── */
 .page {
     min-height: 100vh;
-    background-color: var(--brown);
-    color: var(--blue);
-    padding-top: 60px;
+    background-color: var(--ink);
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    /* top clears the fixed giant logo; sides match header inset (7vw) */
+    padding: clamp(150px, 23vh, 250px) clamp(24px, 7vw, 96px) clamp(28px, 5vh, 56px);
 }
 
-.layout {
+/* ─── Bio + portrait ─── */
+.body {
+    flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: calc(100vh - 60px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
 }
 
-/* ─── Left: portrait ─── */
-.imageCol {
-    position: relative;
+.bioCol {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35em;
+    max-width: 48ch;
+}
+
+.para {
+    /* Bio is sans-serif at normal weight — the one place the site drops BigCaslon */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 1.15vw, 18px);
+    line-height: 1.5;
+    letter-spacing: 0.005em;
+    color: var(--cream);
+    opacity: 0.92;
+    margin: 0;
+    text-wrap: pretty;
 }
 
 .portrait {
     position: relative;
+    margin: 0;
     width: 100%;
-    height: 100%;
-    min-height: 60vh;
+    max-width: clamp(280px, 38vw, 520px);
+    aspect-ratio: 3 / 4;
+    justify-self: end;
+    overflow: hidden;
 }
 
-/* ─── Right: text ─── */
-.textCol {
-    padding: 40px 32px 40px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.bio {
-    font-size: clamp(15px, 1.6vw, 20px);
-    font-weight: 900;
-    line-height: 1.3;
-    max-width: 480px;
-}
-
-.press {
-    margin-top: 20px;
-    font-size: 15px;
-    font-weight: 900;
-    line-height: 1.3;
-}
-
-.press a {
-    text-decoration: underline;
-    color: var(--blue);
-}
-
-/* ─── Footer: contact ─── */
+/* ─── Footer — serif, pinned to the baseline ─── */
 .footer {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: auto;
-    padding-top: 40px;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: clamp(40px, 8vh, 96px);
 }
 
-.contact {
-    font-size: 14px;
-    font-weight: 900;
-    color: var(--blue);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    width: fit-content;
-    transition: opacity 0.15s;
+.footLink {
+    font-family: var(--font-big-caslon), Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(16px, 1.5vw, 24px);
+    letter-spacing: 0.01em;
+    color: var(--cream);
+    transition: opacity 0.15s ease;
 }
 
-.contact:hover {
+.footLink:hover {
     opacity: 0.7;
-}
-
-.contact:focus-visible {
-    outline: 2px solid var(--blue);
-    outline-offset: 3px;
-    border-radius: 2px;
-}
-
-.tagline {
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: 8px;
-    opacity: 0.8;
 }
 
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
-    .layout {
-        grid-template-columns: 1fr;
+    .page {
+        padding-top: clamp(110px, 20vh, 170px);
     }
 
-    .textCol {
-        padding: 24px 16px 40px;
+    .body {
+        grid-template-columns: 1fr;
+        gap: 32px;
     }
 
     .portrait {
-        height: 60vw;
-        min-height: 260px;
+        max-width: none;
+        justify-self: stretch;
+    }
+
+    .footer {
+        margin-top: clamp(32px, 6vh, 56px);
     }
 }

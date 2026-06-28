@@ -16,7 +16,7 @@ function pickIndex(col, row, count) {
     return h % count;
 }
 
-export default function InfiniteGrid({ projects = [], filter = 'All', active = true }) {
+export default function InfiniteGrid({ projects = [], filter = 'All', active = true, cells: cellsProp = null }) {
     const router = useRouter();
     const viewportRef = useRef(null);
     const panRef = useRef({ x: 0, y: 0 });
@@ -31,6 +31,7 @@ export default function InfiniteGrid({ projects = [], filter = 'All', active = t
     const [hintVisible, setHintVisible] = useState(true);
 
     const cells = useMemo(() => {
+        if (cellsProp) return cellsProp;
         const coverCell = (p) =>
             p.content.CoverImage?.filename
                 ? {
@@ -57,7 +58,7 @@ export default function InfiniteGrid({ projects = [], filter = 'All', active = t
             }
         }
         return out.length ? out : projects.map(coverCell).filter(Boolean);
-    }, [projects, filter]);
+    }, [projects, filter, cellsProp]);
 
     const setTileRef = useCallback((key, el) => {
         if (el) tileElsRef.current.set(key, el);
