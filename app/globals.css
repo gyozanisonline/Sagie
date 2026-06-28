@@ -8,6 +8,8 @@
   --off-black: #1a1a1a;
   --blue:      #00f9ff;
   --brown:     #26150b;
+  --ink:       #0d0d0d;   /* info page bg (dark styleframe) */
+  --cream:     #f3eee2;   /* info page text */
 
   --gutter:        8px;
   --header-height: 34px;
@@ -44,4 +46,10 @@ a {
 img {
   display: block;
   max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 2px;
 }

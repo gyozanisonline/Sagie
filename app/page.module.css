@@ -1,6 +1,5 @@
-/* Home page — content sits below the hero logo */
+/* Home — content starts just below the hero logo */
 .page {
-  padding-top: 75vh;
-  /* pushes carousel below the giant logo */
-  min-height: 100vh;
+    padding-top: clamp(120px, 14vw, 160px);
+    min-height: 100vh;
 }

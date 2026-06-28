@@ -1,0 +1,29 @@
+{
+  "fronts": {
+    "bezmani": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Music/Bezmani/Final_01.jpg",
+    "cards": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/Cards/6.jpg",
+    "ein-matzav": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Music/Ein%20Matzav/Layer%204.png",
+    "loop": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Music/Loop/3.jpg",
+    "mayorgov": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Music/Mayorgov/Front.jpg",
+    "collection-3": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/3rd/3.jpg",
+    "collection-5-and-2": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/5th%20and%202nd/3.jpeg",
+    "collection-7": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/7th/3.jpg",
+    "fass": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Music/Fass/fassfinal%20copy.jpg",
+    "collection-2": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/2nd/2.jpg",
+    "collection-1": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/1st/2.jpg",
+    "collection-5": "https://pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev/Going%20Places/Collections/5th/4.jpg"
+  },
+  "tags": {
+    "fass": "Poster",
+    "hummus": "Sneakers",
+    "poster-mika2": [
+      "Poster",
+      "Cover Art"
+    ]
+  },
+  "featured": [
+    "gps",
+    "mayorgov",
+    "sneakerbox-tlv"
+  ]
+}

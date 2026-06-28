@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# raw source assets (hosted on R2, never committed — 13GB)
+/Assets/
+/raw-assets/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

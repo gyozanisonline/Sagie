@@ -1,0 +1,67 @@
+.hero {
+    position: relative;
+    min-height: 100dvh;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 clamp(16px, 4vw, 72px) clamp(36px, 7vh, 84px);
+    pointer-events: none;
+}
+
+.strip {
+    pointer-events: auto;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(8px, 1.4vw, 22px);
+}
+
+.fig {
+    margin: 0;
+    flex: 0 0 auto;
+    width: clamp(120px, 15vw, 210px);
+}
+
+/* varied scale — bottom-aligned so tops stagger, clustered centre */
+.size_s {
+    width: clamp(96px, 11vw, 152px);
+}
+.size_m {
+    width: clamp(116px, 13vw, 182px);
+}
+.size_l {
+    width: clamp(140px, 15vw, 216px);
+}
+
+.link {
+    display: block;
+}
+.img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.25s ease;
+}
+.link:hover .img {
+    opacity: 0.82;
+}
+
+@media (max-width: 640px) {
+    .strip {
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 14px;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .size_s {
+        width: 120px;
+    }
+    .size_m {
+        width: 150px;
+    }
+    .size_l {
+        width: 180px;
+    }
+}

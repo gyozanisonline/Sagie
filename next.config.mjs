@@ -4,11 +4,8 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'a.storyblok.com',
-            },
-            {
-                protocol: 'https',
-                hostname: '**.storyblok.com',
+                hostname: 'pub-d0e7eeb8686c4d4f99d9d40b305dfa6d.r2.dev',
+                pathname: '/**',
             },
         ],
     },
